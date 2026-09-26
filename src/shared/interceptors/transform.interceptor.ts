@@ -17,13 +17,14 @@ export class TransformInterceptor<T> implements NestInterceptor<
     next: CallHandler,
   ): Observable<SuccessResponse<T>> {
     const response = context.switchToHttp().getResponse();
+    const statusCode = response.statusCode;
 
     return next.handle().pipe(
       map((data) => ({
         succes: true,
-        statusCode: response.statusCode,
-        data: data,
-        timestamp: new Date().toString(),
+        statusCode,
+        data: data ?? null,
+        timestamp: new Date().toISOString(),
       })),
     );
   }
