@@ -38,7 +38,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     const errorPayload: FailureResponse = {
-      succes: false,
+      success: false,
       statusCode,
       message,
       error,

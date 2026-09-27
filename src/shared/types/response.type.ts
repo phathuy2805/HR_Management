@@ -1,12 +1,12 @@
 export interface SuccessResponse<T> {
-  succes: boolean;
+  success: boolean;
   statusCode: number;
   data: T;
   timestamp: string;
 }
 
 export interface FailureResponse {
-  succes: boolean;
+  success: boolean;
   statusCode: number;
   message: string;
   error: string;

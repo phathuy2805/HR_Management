@@ -5,9 +5,10 @@ import { AppService } from './app.service.js';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter.js';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor.js';
 import { SharedModule } from './shared/shared.module.js';
+import { AuthModule } from './auth/auth.module.js';
 
 @Module({
-  imports: [SharedModule],
+  imports: [SharedModule, AuthModule],
   controllers: [AppController],
   providers: [
     AppService,
