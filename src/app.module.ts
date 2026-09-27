@@ -5,11 +5,13 @@ import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter.js';
+import { RolesGuard } from './shared/guards/roles.guard.js';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor.js';
 import { SharedModule } from './shared/shared.module.js';
+import { EmployeesModule } from './employees/employees.module.js';
 
 @Module({
-  imports: [SharedModule, AuthModule],
+  imports: [SharedModule, AuthModule, EmployeesModule],
   controllers: [AppController],
   providers: [
     AppService,
@@ -32,6 +34,10 @@ import { SharedModule } from './shared/shared.module.js';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
