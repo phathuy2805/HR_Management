@@ -1,11 +1,12 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { AuthModule } from './auth/auth.module.js';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter.js';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor.js';
 import { SharedModule } from './shared/shared.module.js';
-import { AuthModule } from './auth/auth.module.js';
 
 @Module({
   imports: [SharedModule, AuthModule],
@@ -27,6 +28,10 @@ import { AuthModule } from './auth/auth.module.js';
         forbidNonWhitelisted: true,
         transform: true,
       }),
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
   ],
 })

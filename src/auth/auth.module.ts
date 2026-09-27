@@ -5,6 +5,7 @@ import type { StringValue } from 'ms';
 import { AuthController } from './auth.controller.js';
 import { AuthRepository } from './auth.repository.js';
 import { AuthService } from './auth.service.js';
+import { JwtStrategy } from './strategies/jwt.strategy.js';
 import { LocalStrategy } from './strategies/local.strategy.js';
 
 @Module({
@@ -17,7 +18,7 @@ import { LocalStrategy } from './strategies/local.strategy.js';
       },
     }),
   ],
-  providers: [AuthService, AuthRepository, LocalStrategy],
+  providers: [AuthService, AuthRepository, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })
