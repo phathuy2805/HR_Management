@@ -9,9 +9,17 @@ import { RolesGuard } from './shared/guards/roles.guard.js';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor.js';
 import { SharedModule } from './shared/shared.module.js';
 import { EmployeesModule } from './employees/employees.module.js';
+import { LeaveRequestsModule } from './leave-requests/leave-requests.module.js';
+import { PayrollsModule } from './payrolls/payrolls.module.js';
 
 @Module({
-  imports: [SharedModule, AuthModule, EmployeesModule],
+  imports: [
+    SharedModule,
+    AuthModule,
+    EmployeesModule,
+    LeaveRequestsModule,
+    PayrollsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
