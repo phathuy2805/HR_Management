@@ -9,7 +9,7 @@ import { LocalStrategy } from './strategies/local.strategy.js';
 
 @Module({
   imports: [
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: {
