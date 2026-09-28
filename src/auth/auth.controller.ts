@@ -4,6 +4,7 @@ import { Public } from '../shared/decorators/public.decorator.js';
 import { LoginReqBodyDto, RegisterReqBodyDto } from './auth.dto.js';
 import { AuthService } from './auth.service.js';
 import { LocalAuthGuard } from './guards/local-auth.guard.js';
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

@@ -7,12 +7,14 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { CurrentUser } from '../shared/decorators/current-user.decorator.js';
 import { Roles } from '../shared/decorators/roles.decorator.js';
 import { CreateLeaveRequestDto } from './dto/create-leave-request.dto.js';
 import { LeaveRequestsService } from './leave-requests.service.js';
 
+@ApiBearerAuth('JWT-auth')
 @Controller('leave-requests')
 export class LeaveRequestsController {
   constructor(private readonly leaveService: LeaveRequestsService) {}

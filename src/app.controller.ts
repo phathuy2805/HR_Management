@@ -9,10 +9,13 @@ class TestPipeDto {
   @MinLength(6)
   password: string;
 }
+import { Public } from './shared/decorators/public.decorator.js';
+
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();

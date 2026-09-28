@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { CurrentUser } from '../shared/decorators/current-user.decorator.js';
 import { Roles } from '../shared/decorators/roles.decorator.js';
@@ -17,6 +18,7 @@ import { QueryEmployeeDto } from './dto/query-employee.dto.js';
 import { UpdateEmployeeDto } from './dto/update-employee.dto.js';
 import { EmployeesService } from './employees.service.js';
 
+@ApiBearerAuth('JWT-auth')
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
