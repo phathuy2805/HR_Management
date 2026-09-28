@@ -22,29 +22,32 @@ export class EmployeesService {
     return employee;
   }
 
-  async create(body: CreateEmployeeDto) {
+  async create(body: CreateEmployeeDto, actorId: number) {
     const existing = await this.employeesRepo.findByEmail(body.email);
     if (existing) {
       throw new ConflictException('Email này đã tồn tại trong hệ thống!');
     }
     const hashedPassword = await hash(body.password, SALT_ROUND);
-    return this.employeesRepo.create({
-      first_name: body.first_name,
-      last_name: body.last_name,
-      email: body.email,
-      password: hashedPassword,
-      role: body.role,
-      status: body.status,
-      department: body.department_id
-        ? { connect: { id: body.department_id } }
-        : undefined,
-      job_title: body.job_title_id
-        ? { connect: { id: body.job_title_id } }
-        : undefined,
-      manager: body.manager_id
-        ? { connect: { id: body.manager_id } }
-        : undefined,
-    });
+    return this.employeesRepo.createWithAudit(
+      {
+        first_name: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        password: hashedPassword,
+        role: body.role,
+        status: body.status,
+        department: body.department_id
+          ? { connect: { id: body.department_id } }
+          : undefined,
+        job_title: body.job_title_id
+          ? { connect: { id: body.job_title_id } }
+          : undefined,
+        manager: body.manager_id
+          ? { connect: { id: body.manager_id } }
+          : undefined,
+      },
+      actorId,
+    );
   }
 
   async findAll(query: QueryEmployeeDto) {

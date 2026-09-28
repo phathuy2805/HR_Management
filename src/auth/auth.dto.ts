@@ -41,10 +41,12 @@ export class RegisterReqBodyDto {
     description: 'Mật khẩu xác nhận (phải trùng với password)',
     example: 'password123',
   })
+  @IsString()
+  @IsNotEmpty({ message: 'Mật khẩu xác nhận không được trống' })
   @IsConfirmPassword('password', {
     message: 'Mật khẩu xác nhận không khớp với mật khẩu',
   })
-  confirmPassword: string;
+  confirm_password: string;
 }
 
 export class LoginReqBodyDto {

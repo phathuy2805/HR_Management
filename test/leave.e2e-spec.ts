@@ -33,7 +33,7 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
         last_name: 'One',
         email: `mgr_${Date.now()}@example.com`,
         password: 'password123',
-        confirmPassword: 'password123',
+        confirm_password: 'password123',
       });
     managerId = managerRes.body.data.id;
     await prisma.employee.update({
@@ -55,7 +55,7 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
         last_name: 'Lead',
         email: `hr_${Date.now()}@example.com`,
         password: 'password123',
-        confirmPassword: 'password123',
+        confirm_password: 'password123',
       });
     const hrId = hrRes.body.data.id;
     await prisma.employee.update({
@@ -77,7 +77,7 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
         last_name: 'Member',
         email: `staff_${Date.now()}@example.com`,
         password: 'password123',
-        confirmPassword: 'password123',
+        confirm_password: 'password123',
       });
     const empId = empRes.body.data.id;
     await prisma.employee.update({

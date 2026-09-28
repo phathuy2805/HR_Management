@@ -21,7 +21,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async register(body: RegisterReqBodyDto) {
-    const { email, password, confirmPassword, ...userData } = body;
+    const { email, password, confirm_password, ...userData } = body;
     const userInDb = await this.sharedAuthRepo.findByEmail(email);
     if (userInDb) throw new ConflictException('Người dùng đã tồn tại');
 

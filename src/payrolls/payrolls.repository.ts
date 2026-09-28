@@ -35,7 +35,6 @@ export class PayrollsRepository {
         `SET LOCAL app.current_user_id = '${actorId}';`,
       );
 
-      // Create payrolls sequentially to properly trigger audit logs
       const createdPayrolls: any[] = [];
       for (const item of payrollsData) {
         const p = await tx.payroll.create({

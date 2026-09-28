@@ -28,7 +28,7 @@ describe('Auth & Profile Flow (e2e)', () => {
       last_name: 'Van Test',
       email: uniqueEmail,
       password: 'password123',
-      confirmPassword: 'password123',
+      confirm_password: 'password123',
     });
 
     expect(res.status).toBe(201);

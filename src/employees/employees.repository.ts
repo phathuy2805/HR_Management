@@ -27,12 +27,18 @@ export class EmployeesRepository {
     });
   }
 
-  async create(
+  async createWithAudit(
     data: Prisma.EmployeeCreateInput,
+    actorId: number,
   ): Promise<Omit<Employee, 'password'>> {
-    return this.prisma.employee.create({
-      data,
-      omit: { password: true },
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$executeRawUnsafe(
+        `SET LOCAL app.current_user_id = '${actorId}';`,
+      );
+      return tx.employee.create({
+        data,
+        omit: { password: true },
+      });
     });
   }
 
