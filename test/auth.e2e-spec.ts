@@ -23,29 +23,25 @@ describe('Auth & Profile Flow (e2e)', () => {
   });
 
   it('1. Đăng ký tài khoản mới thành công (POST /auth/register)', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/auth/register')
-      .send({
-        first_name: 'Nguyen',
-        last_name: 'Van Test',
-        email: uniqueEmail,
-        password: 'password123',
-        confirmPassword: 'password123',
-      });
+    const res = await request(app.getHttpServer()).post('/auth/register').send({
+      first_name: 'Nguyen',
+      last_name: 'Van Test',
+      email: uniqueEmail,
+      password: 'password123',
+      confirmPassword: 'password123',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.email).toBe(uniqueEmail);
-    expect(res.body.data.password).toBeUndefined(); // Không để lộ password
+    expect(res.body.data.password).toBeUndefined();
   });
 
   it('2. Đăng nhập thành công và nhận được JWT Tokens (POST /auth/login)', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        email: uniqueEmail,
-        password: 'password123',
-      });
+    const res = await request(app.getHttpServer()).post('/auth/login').send({
+      email: uniqueEmail,
+      password: 'password123',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);

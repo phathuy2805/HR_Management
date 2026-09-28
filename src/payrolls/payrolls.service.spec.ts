@@ -83,7 +83,7 @@ describe('PayrollsService', () => {
         },
       ]);
 
-      repository.createBatchPayrolls.mockImplementation((data) =>
+      repository.createBatchPayrolls.mockImplementation((data: any) =>
         Promise.resolve(data),
       );
 

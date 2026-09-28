@@ -26,7 +26,6 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
     await app.init();
     prisma = app.get<PrismaService>(PrismaService);
 
-    // 1. Tạo Manager
     const managerRes = await request(app.getHttpServer())
       .post('/auth/register')
       .send({
@@ -37,7 +36,6 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
         confirmPassword: 'password123',
       });
     managerId = managerRes.body.data.id;
-    // Nâng quyền lên MANAGER trong DB
     await prisma.employee.update({
       where: { id: managerId },
       data: { role: Role.MANAGER },
@@ -50,7 +48,6 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
       });
     managerToken = mgrLogin.body.data.access_token;
 
-    // 2. Tạo HR Manager
     const hrRes = await request(app.getHttpServer())
       .post('/auth/register')
       .send({
@@ -73,7 +70,6 @@ describe('Leave Request Dual-Approval Workflow (e2e)', () => {
       });
     hrToken = hrLogin.body.data.access_token;
 
-    // 3. Tạo Employee (có manager_id trỏ về Manager vừa tạo)
     const empRes = await request(app.getHttpServer())
       .post('/auth/register')
       .send({

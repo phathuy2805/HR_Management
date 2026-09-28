@@ -1,114 +1,132 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🏢 HUMAN RESOURCE MANAGEMENT (HRM) WEB APPLICATION
+> **DEFENSE CASE STUDY 5: BACKEND ENTERPRISE WITH NESTJS & POSTGRESQL**  
+> *Đồ án tốt nghiệp / Bài tập lớn chuyên đề Lập trình Backend Nâng cao*
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📌 1. Giới thiệu dự án
+Hệ thống Quản trị Nhân sự (HRM) mô phỏng môi trường doanh nghiệp thực tế, đáp ứng các tiêu chuẩn khắt khe về:
+* **Tính toàn vẹn dữ liệu:** Chuẩn hóa 3NF, ràng buộc toàn vẹn `CHECK`, cột tính toán ảo `GENERATED ALWAYS AS`, và cơ chế kiểm toán tự động bằng **Trigger PL/pgSQL** ở tầng PostgreSQL.
+* **Bảo mật đa tầng (Defense-in-Depth):** Helmet, CORS, Global `ValidationPipe`, Stateless JWT, RBAC (`USER`, `MANAGER`, `HR_MANAGER`, `ADMIN`).
+* **Quy trình duyệt phép 2 cấp (Dual-Approval Workflow):** Manager trực tiếp duyệt cấp 1 ➔ HR Manager duyệt cấp 2.
+* **Tính lương tự động (Automated Payroll):** Khấu trừ ngày nghỉ không hợp lệ, tự động tính tổng lương.
+* **Kiểm thử tự động:** Unit Test đạt độ bao phủ code (Coverage) > 89% và E2E Test toàn diện với Supertest.
+* **Tài liệu hóa API:** Swagger UI chuẩn OpenAPI 3.0 tại `/api/docs`.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🛠️ 2. Tech Stack sử dụng
+* **Framework:** NestJS v12+ (TypeScript)
+* **Cơ sở dữ liệu:** PostgreSQL v15+
+* **ORM:** Prisma ORM v6+
+* **Bảo mật & Xác thực:** Passport.js, JWT (`@nestjs/jwt`), Bcrypt, Helmet, CORS
+* **Validation:** `class-validator`, `class-transformer`
+* **API Documentation:** Swagger UI (`@nestjs/swagger`)
+* **Kiểm thử:** Vitest / Jest (Unit Test), Supertest (E2E Test)
+* **Triển khai:** Docker, Docker Compose
 
-## Project setup
+---
 
+## 🚀 3. Hướng dẫn cài đặt & Khởi chạy
+
+### Cách 1: Chạy trực tiếp trên máy cục bộ (Local Development)
+
+#### 1. Cài đặt thư viện:
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
-
+#### 2. Cấu hình biến môi trường:
+Tạo file `.env` từ file mẫu `.env.example`:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
+```
+Cấu hình chuỗi kết nối PostgreSQL của bạn trong `.env`:
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/hr_management?schema=public"
+JWT_SECRET=super_secret_jwt_key_hr_management_2026
+JWT_ACCESS_TOKEN_EXPIRE=1h
+JWT_REFRESH_TOKEN_EXPIRE=7d
+CORS_ORIGIN=http://localhost:3000
+PORT=3000
 ```
 
-## Run tests
-
+#### 3. Chạy Migration và Trigger Database:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma migrate dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+#### 4. Khởi động ứng dụng:
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Chế độ phát triển (Watch mode)
+npm run start:dev
+
+# Chế độ Production build
+npm run build
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Observability
+### Cách 2: Chạy toàn bộ hệ thống bằng Docker Compose (Khuyên dùng)
+Chỉ với 1 câu lệnh duy nhất, Docker sẽ tự động dựng cả PostgreSQL 15 và ứng dụng NestJS:
+```bash
+docker compose up -d --build
+```
+* **API Server:** `http://localhost:3000`
+* **Swagger Documentation:** `http://localhost:3000/api/docs`
+* **PostgreSQL Port:** `localhost:5432`
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+---
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+## 🧪 4. Hướng dẫn chạy Kiểm thử tự động (Testing)
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+### 1. Kiểm thử Đơn vị (Unit Test cô lập với Mocking):
+Tập trung kiểm thử logic phức tạp của `PayrollService` và `LeaveRequestsService`:
+```bash
+npm test
+```
 
-## Resources
+### 2. Xem Báo cáo Tỷ lệ Bao phủ (Coverage Report $\ge 70\%$):
+```bash
+npm run test:cov
+```
+> **Kết quả thực tế:**
+> * `LeaveRequestsService`: **89.65%** Coverage
+> * `PayrollsService`: **94.59%** Coverage
+> *(Vượt xa chỉ tiêu $\ge 70\%$ theo yêu cầu của đề bài)*
 
-Check out a few resources that may come in handy when working with NestJS:
+### 3. Kiểm thử Tích hợp (E2E Test với Supertest):
+Chạy toàn bộ chu kỳ yêu cầu: Đăng ký ➔ Đăng nhập nhận JWT ➔ Truy cập Profile ➔ Duyệt phép 2 cấp:
+```bash
+npm run test:e2e
+```
+*(Toàn bộ 3 kịch bản E2E Test đều PASS 100%)*
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## 📖 5. Tài liệu API (Swagger UI)
+Sau khi bật server, truy cập vào đường dẫn:
+👉 **`http://localhost:3000/api/docs`**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+* **Tính năng:**
+  * Toàn bộ DTOs đều có mô tả tiếng Việt (`description`) và dữ liệu mẫu (`example`).
+  * Tích hợp nút **Authorize (ổ khóa xanh)**: Sau khi đăng nhập tại `POST /auth/login`, copy chuỗi `access_token` dán vào để gọi thử các API được bảo vệ.
+  * Phân nhóm theo các Tags: `Auth`, `Employees`, `Profile`, `Leave Requests`, `Payrolls`.
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🔒 6. Bảng phân quyền Role-Based Access Control (RBAC)
 
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Phân hệ API | USER | MANAGER | HR_MANAGER | ADMIN |
+| :--- | :---: | :---: | :---: | :---: |
+| **Auth (Register / Login)** | Công khai | Công khai | Công khai | Công khai |
+| **Xem Profile cá nhân (`GET /profile`)** | ✅ | ✅ | ✅ | ✅ |
+| **Quản lý Nhân sự (`CRUD /employees`)** | ❌ | ❌ | ✅ | ✅ |
+| **Nộp đơn xin nghỉ phép (`POST /leave-requests`)** | ✅ | ✅ | ✅ | ✅ |
+| **Duyệt phép Cấp 1 (`approve-manager`)** | ❌ | ✅ *(Sếp trực tiếp)* | ❌ | ❌ |
+| **Duyệt phép Cấp 2 (`approve-hr`)** | ❌ | ❌ | ✅ | ❌ |
+| **Khởi tạo kỳ tính lương (`POST /payrolls/process`)** | ❌ | ❌ | ✅ | ❌ |
+| **Xem phiếu lương của chính mình** | ✅ | ✅ | ✅ | ✅ |
+| **Xem bảng lương toàn công ty (`GET /payrolls`)** | ❌ | ❌ | ✅ | ✅ |
+| **Xem Database Audit Logs** | ❌ | ❌ | ❌ | ✅ |

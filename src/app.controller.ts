@@ -17,9 +17,15 @@ export class AppController {
 
   @Public()
   @Get()
+  getRoot(): string {
+    return this.appService.getHello();
+  }
+
+  @Get('hello')
   getHello(): string {
     return this.appService.getHello();
   }
+
   @Post('test-pipe')
   testPipe(@Body() body: TestPipeDto) {
     return body;

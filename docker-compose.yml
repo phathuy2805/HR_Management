@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: hrm_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: hr_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Ứng dụng Backend NestJS
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hrm_api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DATABASE_URL: "postgresql://postgres:postgrespassword@postgres:5432/hr_management?schema=public"
+      CORS_ORIGIN: "http://localhost:3000"
+      JWT_SECRET: "super_secret_jwt_key_hr_management_2026"
+      JWT_ACCESS_TOKEN_EXPIRE: "1h"
+      JWT_REFRESH_TOKEN_EXPIRE: "7d"
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
