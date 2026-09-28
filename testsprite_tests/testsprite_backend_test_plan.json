@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "post auth register with valid and invalid data",
+    "description": "Test the POST /auth/register endpoint for successful employee registration with valid data, validation errors with invalid email or mismatched confirm_password, and conflict error when email already exists."
+  },
+  {
+    "id": "TC002",
+    "title": "post auth login with valid and invalid credentials",
+    "description": "Test the POST /auth/login endpoint for successful login with valid credentials, unauthorized error with invalid credentials, and unauthorized error for terminated user accounts."
+  },
+  {
+    "id": "TC003",
+    "title": "get profile with valid and invalid tokens",
+    "description": "Test the GET /profile endpoint to retrieve the authenticated user's profile with a valid Bearer token and verify 401 Unauthorized response when token is missing or invalid."
+  },
+  {
+    "id": "TC004",
+    "title": "post employees with role based access and validation",
+    "description": "Test the POST /employees endpoint for creating new employee records with valid data and HR_MANAGER or ADMIN roles, and verify 403 Forbidden for insufficient roles and 400 Bad Request for missing or malformed data."
+  },
+  {
+    "id": "TC005",
+    "title": "get employees list with pagination and role permissions",
+    "description": "Test the GET /employees endpoint with pagination parameters for HR_MANAGER or ADMIN roles to retrieve employee lists, and verify 403 Forbidden for users without sufficient permissions."
+  },
+  {
+    "id": "TC006",
+    "title": "get employee detail by id with role based access",
+    "description": "Test the GET /employees/:id endpoint to retrieve a single employee's details with HR_MANAGER or ADMIN roles and verify access control."
+  },
+  {
+    "id": "TC007",
+    "title": "patch employees update with valid data and roles",
+    "description": "Test the PATCH /employees/:id endpoint to update employee records with valid fields and HR_MANAGER or ADMIN roles, ensuring successful update and role-based access control."
+  },
+  {
+    "id": "TC008",
+    "title": "delete employees soft delete with role based access",
+    "description": "Test the DELETE /employees/:id endpoint to change employee status to TERMINATED with HR_MANAGER or ADMIN roles and verify access restrictions."
+  },
+  {
+    "id": "TC009",
+    "title": "post leave requests with valid and invalid data",
+    "description": "Test the POST /leave-requests endpoint for submitting leave requests with valid dates and leave types, and verify 400 Bad Request for invalid date ranges or missing required fields."
+  },
+  {
+    "id": "TC010",
+    "title": "post payrolls process with role and validation checks",
+    "description": "Test the POST /payrolls/process endpoint for processing monthly payrolls with valid pay period and HR_MANAGER role, and verify 403 Forbidden for unauthorized roles and 400 Bad Request for missing pay period fields."
+  }
+]

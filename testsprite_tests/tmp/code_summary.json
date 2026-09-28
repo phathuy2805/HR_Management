@@ -1,0 +1,241 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "NestJS",
+    "PostgreSQL",
+    "Prisma ORM",
+    "Passport JWT",
+    "Docker"
+  ],
+  "features": [
+    {
+      "name": "Auth Register",
+      "description": "Register a new employee account in the HRM system",
+      "files": [
+        "src/auth/auth.controller.ts",
+        "src/auth/auth.service.ts",
+        "src/auth/auth.repository.ts",
+        "src/auth/auth.dto.ts"
+      ],
+      "api_doc": {
+        "path": "/auth/register",
+        "method": "POST",
+        "summary": "Register new user",
+        "description": "Public registration endpoint",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["first_name", "last_name", "email", "password", "confirm_password"],
+                "properties": {
+                  "first_name": { "type": "string", "example": "Nguyen" },
+                  "last_name": { "type": "string", "example": "Van A" },
+                  "email": { "type": "string", "format": "email", "example": "user@company.com" },
+                  "password": { "type": "string", "minLength": 6, "example": "Password123@" },
+                  "confirm_password": { "type": "string", "example": "Password123@" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Employee registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "statusCode": { "type": "integer", "example": 201 },
+                    "data": { "type": "object" },
+                    "timestamp": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Auth Login",
+      "description": "Authenticate user and issue JWT access and refresh tokens",
+      "files": [
+        "src/auth/auth.controller.ts",
+        "src/auth/auth.service.ts",
+        "src/auth/strategies/local.strategy.ts",
+        "src/auth/guards/local-auth.guard.ts"
+      ],
+      "api_doc": {
+        "path": "/auth/login",
+        "method": "POST",
+        "summary": "User login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "user@company.com" },
+                  "password": { "type": "string", "example": "Password123@" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Login success with access and refresh tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "statusCode": { "type": "integer", "example": 201 },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "access_token": { "type": "string" },
+                        "refresh_token": { "type": "string" }
+                      }
+                    },
+                    "timestamp": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "User Profile",
+      "description": "Get current logged-in user profile with department and manager info",
+      "files": [
+        "src/employees/profile.controller.ts",
+        "src/employees/employees.service.ts"
+      ],
+      "api_doc": {
+        "path": "/profile",
+        "method": "GET",
+        "summary": "Get own profile",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "User profile details" }
+        }
+      }
+    },
+    {
+      "name": "Employees Management",
+      "description": "Create, find, update, and delete employees with role-based access control",
+      "files": [
+        "src/employees/employees.controller.ts",
+        "src/employees/employees.service.ts",
+        "src/employees/employees.repository.ts"
+      ],
+      "api_doc": {
+        "path": "/employees",
+        "method": "POST",
+        "summary": "Create new employee record",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["first_name", "last_name", "email", "password"],
+                "properties": {
+                  "first_name": { "type": "string" },
+                  "last_name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "role": { "type": "string", "enum": ["USER", "MANAGER", "HR_MANAGER", "ADMIN"] },
+                  "department_id": { "type": "integer" },
+                  "job_title_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Employee created successfully" }
+        }
+      }
+    },
+    {
+      "name": "Leave Requests Workflow",
+      "description": "Multi-tier approval workflow for employee leave requests (Employee -> Manager -> HR)",
+      "files": [
+        "src/leave-requests/leave-requests.controller.ts",
+        "src/leave-requests/leave-requests.service.ts",
+        "src/leave-requests/leave-requests.repository.ts"
+      ],
+      "api_doc": {
+        "path": "/leave-requests",
+        "method": "POST",
+        "summary": "Submit a leave request",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["start_date", "end_date"],
+                "properties": {
+                  "start_date": { "type": "string", "format": "date" },
+                  "end_date": { "type": "string", "format": "date" },
+                  "type": { "type": "string", "enum": ["SICK", "CASUAL", "VACATION"] },
+                  "reason": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Leave request created with status PENDING" }
+        }
+      }
+    },
+    {
+      "name": "Payrolls Processing",
+      "description": "Calculate monthly payrolls with automatic leave deduction and view payslips",
+      "files": [
+        "src/payrolls/payrolls.controller.ts",
+        "src/payrolls/payrolls.service.ts",
+        "src/payrolls/payrolls.repository.ts"
+      ],
+      "api_doc": {
+        "path": "/payrolls/process",
+        "method": "POST",
+        "summary": "Process monthly payroll batch",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["pay_period_start", "pay_period_end"],
+                "properties": {
+                  "pay_period_start": { "type": "string", "format": "date" },
+                  "pay_period_end": { "type": "string", "format": "date" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Payrolls processed successfully" }
+        }
+      }
+    }
+  ]
+}

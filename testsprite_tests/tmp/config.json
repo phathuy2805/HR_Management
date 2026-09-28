@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "nestjs-final-project",
+    "projectPath": "d:\\code-project\\Rikkeiedu\\all-practices\\nestjs-final-project",
+    "testIds": [],
+    "additionalInstruction": "Use http://localhost:3000 as backend base URL. Handle TransformInterceptor response wrapping { success, statusCode, data, timestamp }.",
+    "envs": {
+      "API_KEY": "sk-member-mXrwVLmM9sE8d6saagRhubyiZ8RtoVi5CJlPM-YT13c"
+    }
+  },
+  "serverPort": 50612,
+  "proxy": "http://45e1e232-06fd-4afd-9094-a6912821623d:DWSO9IM0OmWBg9aFbwCMeXFHhPHyGrro@tun.testsprite.com:8080"
+}
